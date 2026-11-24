@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ht">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07110d">
+  <title>Aviator Data Lab</title>
+  <style>
+    :root{--bg:#07110d;--panel:#101d17;--panel2:#14251c;--line:#263b2e;--green:#28d17c;--muted:#9bb0a2;--white:#eef8f1;--red:#ff7777}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at top,#10271b 0,#07110d 55%);color:var(--white);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    .wrap{max-width:1050px;margin:auto;padding:22px 15px 45px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+    .brand{display:flex;align-items:center;gap:11px}
+    .logo{width:43px;height:43px;border-radius:13px;background:linear-gradient(145deg,#39e68b,#087c48);display:grid;place-items:center;color:#04140b;font-weight:900;font-size:21px}
+    h1{font-size:19px;margin:0;letter-spacing:.3px} .sub{font-size:12px;color:var(--muted)}
+    .tag{border:1px solid #28583d;color:#8df0b8;border-radius:30px;padding:5px 10px;font-size:11px;white-space:nowrap}
+    .hero{background:linear-gradient(135deg,#153523,#0e1a13);border:1px solid #28543a;border-radius:19px;padding:19px;margin-bottom:16px}
+    .hero h2{margin:0 0 5px;font-size:21px}.hero p{margin:0;color:#b5cabc;font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:14px 0}
+    .card,.panel{background:rgba(16,29,23,.94);border:1px solid var(--line);border-radius:16px;padding:15px}
+    .metric-label{font-size:12px;color:var(--muted)}.metric{font-size:24px;font-weight:750;margin-top:5px;color:#eafff1}
+    .panel{margin-top:14px}.panel h3{font-size:15px;margin:0 0 12px}
+    .formrow{display:flex;gap:9px;flex-wrap:wrap}
+    input{min-width:0;flex:1;background:#09140e;border:1px solid #355341;border-radius:10px;padding:12px;color:white;font-size:15px;outline:none}
+    input:focus{border-color:var(--green)}
+    button{border:0;border-radius:10px;padding:12px 15px;font-weight:700;background:var(--green);color:#052012;cursor:pointer}
+    button.secondary{background:#1b3024;color:#d9f6e4;border:1px solid #355341}
+    button.danger{background:#3b2020;color:#ffcaca;border:1px solid #633333}
+    .note{font-size:12px;color:var(--muted);margin-top:9px}
+    .tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:330px}
+    th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #26382d;font-size:13px}
+    th{color:var(--muted);font-weight:600}
+    .pill{display:inline-block;border-radius:20px;padding:3px 8px;background:#183b28;color:#9bf0bd;font-size:11px}
+    .empty{color:var(--muted);text-align:center;padding:20px 8px;font-size:13px}
+    .barlist{display:grid;gap:10px}.barrow{display:grid;grid-template-columns:75px 1fr 35px;gap:9px;align-items:center;font-size:12px;color:var(--muted)}
+    .track{height:9px;background:#203128;border-radius:20px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#159653,#4be89b);border-radius:20px}
+    footer{color:#80988a;font-size:11px;text-align:center;margin-top:22px}
+    @media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr)}header{align-items:flex-start}.tag{font-size:10px}.metric{font-size:21px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><div class="logo">AD</div><div><h1>AVIATOR DATA LAB</h1><div class="sub">Laboratwa estatistik • Vèsyon 1.0</div></div></div>
+    <span class="tag">MODE TÈS</span>
+  </header>
+
+  <section class="hero">
+    <h2>Analize done yo avèk klète.</h2>
+    <p>Anrejistre valè tès, konsève yo sou aparèy la, epi swiv estatistik yo. Paj sa a pa konekte ak jwèt Aviator epi li pa predi pwochen rezilta.</p>
+  </section>
+
+  <section class="grid">
+    <div class="card"><div class="metric-label">Kantite done</div><div class="metric" id="count">0</div></div>
+    <div class="card"><div class="metric-label">Mwayèn</div><div class="metric" id="average">—</div></div>
+    <div class="card"><div class="metric-label">Medyàn</div><div class="metric" id="median">—</div></div>
+    <div class="card"><div class="metric-label">Pi gwo valè</div><div class="metric" id="maximum">—</div></div>
+  </section>
+
+  <section class="panel">
+    <h3>Ajoute yon done tès</h3>
+    <div class="formrow">
+      <input id="valueInput" type="number" min="1" max="100000" step="0.01" placeholder="Egzanp: 2.45" inputmode="decimal">
+      <button id="addBtn">Anrejistre</button>
+    </div>
+    <div class="note">Antre valè demonstrasyon oswa done ou deja genyen. Done yo rete nan navigatè telefòn sa a.</div>
+  </section>
+
+  <section class="panel">
+    <h3>Similatè estimasyon eksperimantal</h3>
+    <p class="note" style="margin:0 0 12px">Modil aprantisaj sa a itilize sèlman valè sentetik li kreye pou demonstrasyon. Li pa konekte ak Aviator, li pa analize rezilta jwèt reyèl, epi li pa bay prediksyon pou paryaj.</p>
+    <div class="grid" style="grid-template-columns:repeat(2,1fr);margin:0 0 12px">
+      <div class="card"><div class="metric-label">Dènye valè simulation</div><div class="metric" id="simLast">—</div></div>
+      <div class="card"><div class="metric-label">Estimasyon pwochen echantiyon</div><div class="metric" id="simForecast">—</div></div>
+    </div>
+    <div class="formrow">
+      <button id="runSimBtn">Kreye simulation + estimasyon</button>
+      <button class="secondary" id="resetSimBtn">Rekòmanse</button>
+    </div>
+    <div class="note" id="simExplanation">Peze bouton an pou kreye yon seri done sentetik epi kalkile yon mwayèn mobil sou 5 dènye valè yo.</div>
+    <div class="tablewrap" style="margin-top:10px">
+      <table><thead><tr><th>Echantiyon sentetik</th><th>Valè</th></tr></thead><tbody id="simRows"></tbody></table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>Evalye modèl estatistik la</h3>
+    <p class="note" style="margin:0 0 12px">Tès sa a kreye 30 valè sentetik. Li konpare mwayèn 5 dènye valè yo ak pwochen valè sentetik la, epi kalkile erè mwayèn absoli (MAE). Rezilta a pa mezire ni predi rezilta Aviator.</p>
+    <div class="grid" style="grid-template-columns:repeat(2,1fr);margin:0 0 12px">
+      <div class="card"><div class="metric-label">Tès ki fèt</div><div class="metric" id="evalRuns">0</div></div>
+      <div class="card"><div class="metric-label">Erè mwayèn (MAE)</div><div class="metric" id="evalMae">—</div></div>
+    </div>
+    <div class="formrow">
+      <button id="evaluateBtn">Lanse tès 30 echantiyon</button>
+      <button class="secondary" id="clearEvalBtn">Reyajiste tès</button>
+    </div>
+    <div class="note" id="evalDetails">Pa gen tès ki fèt ankò.</div>
+  </section>
+
+  <section class="panel">
+    <h3>Distribisyon done yo</h3>
+    <div class="barlist" id="distribution"></div>
+    <div class="note">Kantite done ki tonbe nan chak kategori; sa se rezime istorik, li pa endike pwochen rezilta.</div>
+  </section>
+
+  <section class="panel">
+    <h3>Dènye done anrejistre yo</h3>
+    <div class="tablewrap">
+      <table><thead><tr><th>#</th><th>Valè</th><th>Lè</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+    </div>
+    <div id="empty" class="empty">Pa gen done ankò. Ajoute yon valè tès pou kòmanse.</div>
+    <div class="formrow" style="margin-top:12px">
+      <button class="secondary" id="exportBtn">Ekspòte CSV</button>
+      <button class="secondary" id="sampleBtn">Chaje done demonstrasyon</button>
+      <button class="danger" id="clearBtn">Efase tout</button>
+    </div>
+  </section>
+  <footer>AVIATOR DATA LAB • Zouti aprantisaj estatistik • Pa yon sèvis paryaj ni yon sistèm prediksyon.</footer>
+</div>
+<script>
+(() => {
+  const KEY = "aviator_data_lab_v1";
+  let records = [];
+  try { records = JSON.parse(localStorage.getItem(KEY) || "[]"); if (!Array.isArray(records)) records = []; } catch { records = []; }
+  const $ = id => document.getElementById(id);
+  const save = () => localStorage.setItem(KEY, JSON.stringify(records));
+  const fmt = n => Number(n).toFixed(2) + "x";
+  function median(nums) {
+    const a = [...nums].sort((x,y)=>x-y), m=Math.floor(a.length/2);
+    return a.length ? (a.length%2 ? a[m] : (a[m-1]+a[m])/2) : null;
+  }
+  function render() {
+    const vals = records.map(r=>r.value);
+    $("count").textContent = vals.length;
+    $("average").textContent = vals.length ? fmt(vals.reduce((a,b)=>a+b,0)/vals.length) : "—";
+    $("median").textContent = vals.length ? fmt(median(vals)) : "—";
+    $("maximum").textContent = vals.length ? fmt(Math.max(...vals)) : "—";
+    $("rows").innerHTML = "";
+    $("empty").style.display = records.length ? "none" : "block";
+    records.slice(-12).reverse().forEach((r,i)=>{
+      const tr=document.createElement("tr");
+      const cells=[String(records.length-i),fmt(r.value),new Date(r.time).toLocaleString("ht-HT",{dateStyle:"short",timeStyle:"short"})];
+      cells.forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.appendChild(td);});
+      const td=document.createElement("td"), del=document.createElement("button");
+      del.textContent="Retire";del.className="secondary";del.style.padding="6px 9px";del.style.fontSize="11px";
+      del.addEventListener("click",()=>{records.splice(records.length-1-i,1);save();render();});
+      td.appendChild(del);tr.appendChild(td);$("rows").appendChild(tr);
+    });
+    const groups=[{label:"1.00x – 1.99x",n:0,ok:v=>v<2},{label:"2.00x – 4.99x",n:0,ok:v=>v>=2&&v<5},{label:"5.00x – 9.99x",n:0,ok:v=>v>=5&&v<10},{label:"10.00x oswa plis",n:0,ok:v=>v>=10}];
+    vals.forEach(v=>groups.forEach(g=>{if(g.ok(v))g.n++;}));
+    const max=Math.max(1,...groups.map(g=>g.n));
+    $("distribution").innerHTML=groups.map(g=>`<div class="barrow"><span>${g.label}</span><div class="track"><div class="fill" style="width:${g.n/max*100}%"></div></div><strong>${g.n}</strong></div>`).join("");
+  }
+  $("addBtn").addEventListener("click",()=>{
+    const v=Number($("valueInput").value);
+    if(!Number.isFinite(v)||v<1||v>100000){alert("Antre yon valè ant 1 ak 100000.");return;}
+    records.push({value:Math.round(v*100)/100,time:new Date().toISOString()});
+    save();$("valueInput").value="";render();
+  });
+  $("valueInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("addBtn").click();});
+  $("clearBtn").addEventListener("click",()=>{
+    if(confirm("Èske ou vle efase tout done ki anrejistre sou aparèy sa a?")){records=[];save();render();}
+  });
+  $("sampleBtn").addEventListener("click",()=>{
+    const sample=[1.24,2.15,1.08,3.42,1.76,5.21,1.33,2.84,1.02,8.60,1.91,4.12,12.35,1.45,2.07];
+    sample.forEach(v=>records.push({value:v,time:new Date().toISOString()}));save();render();
+  });
+  $("exportBtn").addEventListener("click",()=>{
+    if(!records.length){alert("Pa gen done pou ekspòte.");return;}
+    const csv="Valè,Lè\n"+records.map(r=>`${r.value},${r.time}`).join("\n");
+    const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});
+    const url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="aviator-data-lab.csv";a.click();URL.revokeObjectURL(url);
+  });
+  // Evalyasyon pedagojik sou seri sentetik sèlman.
+  let evalRuns = 0;
+  function updateEval() {
+    $("evalRuns").textContent = String(evalRuns);
+    $("evalMae").textContent = window._aviatorLabMae == null ? "—" : Number(window._aviatorLabMae).toFixed(2) + "x";
+  }
+  $("evaluateBtn").addEventListener("click",()=>{
+    const synthetic = Array.from({length:30},()=>Math.round((1 + Math.random()*9)*100)/100);
+    const errors = [];
+    for(let i=5;i<synthetic.length;i++){
+      const estimate = synthetic.slice(i-5,i).reduce((a,b)=>a+b,0)/5;
+      errors.push(Math.abs(estimate-synthetic[i]));
+    }
+    const mae = errors.reduce((a,b)=>a+b,0)/errors.length;
+    evalRuns++;
+    window._aviatorLabMae = mae;
+    updateEval();
+    $("evalDetails").textContent = "Sou 25 konparezon sentetik, MAE a se " + mae.toFixed(2) + "x. Yon erè pi piti vle di mwayèn mobil la te pi pre seri sentetik sa a sèlman; sa pa bay garanti pou lòt seri.";
+  });
+  $("clearEvalBtn").addEventListener("click",()=>{
+    evalRuns=0;window._aviatorLabMae=null;updateEval();
+    $("evalDetails").textContent="Pa gen tès ki fèt ankò.";
+  });
+
+  // Similatè sa a itilize done sentetik apa; li pa sèvi ak done itilizatè a.
+  let simValues = [];
+  function renderSimulation() {
+    $("simLast").textContent = simValues.length ? fmt(simValues[simValues.length-1]) : "—";
+    const forecast = simValues.length ? simValues.slice(-5).reduce((a,b)=>a+b,0)/Math.min(5,simValues.length) : null;
+    $("simForecast").textContent = forecast === null ? "—" : fmt(forecast);
+    $("simRows").innerHTML = simValues.slice().reverse().map((v,i)=>`<tr><td>${simValues.length-i}</td><td>${fmt(v)}</td></tr>`).join("");
+    $("simExplanation").textContent = simValues.length
+      ? "Estimasyon an se mwayèn mobil 5 dènye echantiyon sentetik yo. Se yon demonstrasyon matematik, se pa rezilta yon jwèt."
+      : "Peze bouton an pou kreye yon seri done sentetik epi kalkile yon mwayèn mobil sou 5 dènye valè yo.";
+  }
+  $("runSimBtn").addEventListener("click",()=>{
+    // Done o aza pou demonstrasyon statistik sèlman.
+    const v = Math.round((1 + Math.random()*9)*100)/100;
+    simValues.push(v);
+    if (simValues.length > 12) simValues.shift();
+    renderSimulation();
+  });
+  $("resetSimBtn").addEventListener("click",()=>{
+    simValues = [];
+    renderSimulation();
+  });
+  render();
+  renderSimulation();
+  updateEval();
+})();
+</script>
+</body>
+</html>
